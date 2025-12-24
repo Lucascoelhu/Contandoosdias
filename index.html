@@ -35,7 +35,20 @@ body{
 h1{
   font-size:1.6rem;
   color:#c74bff;
-  margin-bottom:14px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+/* PAINEL SECRETO */
+#painelSecreto{
+  display:none;
+  margin:10px 0;
+  padding:10px;
+  background:#fff;
+  border-radius:14px;
+  font-size:0.85rem;
+  color:#7a3c86;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* BLOCO SENTIMENTO */
@@ -77,7 +90,7 @@ h1{
 }
 
 .texto.expandido{
-  max-height:800px;
+  max-height:900px;
 }
 
 .btn-ler{
@@ -100,7 +113,13 @@ img{
 <body>
 
 <div class="card">
-  <h1>Algumas palavras pra você</h1>
+  <h1 id="titulo">Algumas palavras pra você</h1>
+
+  <!-- PAINEL SECRETO -->
+  <div id="painelSecreto">
+    👀 <strong>Leituras:</strong> <span id="totalCliques">0</span><br>
+    🕒 <strong>Última:</strong> <span id="ultimoClique">---</span>
+  </div>
 
   <div class="sentimento">
     <div class="icone">💌</div>
@@ -120,29 +139,17 @@ img{
     <br><br>
 
     Deslumbrante. É como se a perfeição tivesse finalmente encontrado um rosto — e esse rosto é o seu.  
-    Não falta, nem sobra nada; você é o equilíbrio exato. Eu passaria horas descrevendo cada detalhe seu,  
-    mas escrevo para não demonstrar tanto o quanto te admiro (embora seja difícil esconder).
+    Não falta, nem sobra nada; você é o equilíbrio exato.
 
     <br><br>
 
-    Meu maior desejo é ver sua felicidade transbordar. Aquele seu sorriso real, que faz os olhos se apertarem  
-    e ilumina tudo ao redor. Mas, além da beleza, quero te agradecer. Obrigado por transformar meu modo de pensar  
+    Meu maior desejo é ver sua felicidade transbordar.  
+    Obrigado por transformar meu modo de pensar  
     e por me fazer observar o mundo de um jeito novo.
 
     <br><br>
 
-    Por isso, te peço: cuide-se. Proteja sua saúde, sua mente e sua essência.  
-    Nos dias difíceis, lembre-se que a força nasce na superação.  
-    Siga seu caminho com calma, estude, floresça e nunca esqueça o potencial gigante que você tem.
-
-    <br><br>
-
-    E quando tiver um segundo, olhe-se no espelho.  
-    Mas olhe de perto. Repare na imensidão desses seus olhos  
-    e na perfeição que eles carregam.
-
-    <br><br>
-
+    Cuide-se. Proteja sua saúde, sua mente e sua essência.  
     Seja sempre a mulher dos seus sonhos,  
     porque, para mim, você já é a personificação da perfeição.
   </div>
@@ -155,12 +162,12 @@ img{
 <script>
 /* FIREBASE */
 const firebaseConfig = {
-  apiKey: "AIzaSyA-YBCIT3Pxu4Bxsp2zFYQNJaeCVwF56wk",
-  authDomain: "contando-os-dias-239c4.firebaseapp.com",
-  projectId: "contando-os-dias-239c4",
-  storageBucket: "contando-os-dias-239c4.firebasestorage.app",
-  messagingSenderId: "977000598682",
-  appId: "1:977000598682:web:57f31458ed3a4a69972323"
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_MESSAGING_ID",
+  appId: "SEU_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -185,10 +192,40 @@ function lerMais(){
       });
       registrado = true;
     }
-
   } else {
     btn.textContent = "Ler mais";
   }
+}
+
+/* PAINEL SECRETO – 3 cliques no título */
+let clicks = 0;
+const titulo = document.getElementById("titulo");
+
+titulo.addEventListener("click", () => {
+  clicks++;
+  if(clicks === 3){
+    mostrarPainel();
+    clicks = 0;
+  }
+  setTimeout(() => clicks = 0, 1200);
+});
+
+function mostrarPainel(){
+  const painel = document.getElementById("painelSecreto");
+  painel.style.display = "block";
+
+  db.collection("lerMaisClicks")
+    .orderBy("data", "desc")
+    .get()
+    .then(snapshot => {
+      document.getElementById("totalCliques").textContent = snapshot.size;
+
+      if(!snapshot.empty){
+        const ultima = snapshot.docs[0].data().data.toDate();
+        document.getElementById("ultimoClique").textContent =
+          ultima.toLocaleString("pt-BR");
+      }
+    });
 }
 </script>
 

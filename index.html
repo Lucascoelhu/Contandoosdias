@@ -39,7 +39,6 @@ h1{
   cursor:pointer;
 }
 
-/* PAINEL SECRETO */
 #painelSecreto{
   display:none;
   margin:10px 0;
@@ -51,7 +50,6 @@ h1{
   box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* BLOCO SENTIMENTO */
 .sentimento{
   margin:14px 0 6px;
   padding:14px;
@@ -79,7 +77,6 @@ h1{
   margin-top:4px;
 }
 
-/* TEXTO */
 .texto{
   margin-top:16px;
   color:#7a3c86;
@@ -87,25 +84,46 @@ h1{
   max-height:48px;
   overflow:hidden;
   transition:max-height .4s ease;
+  text-align:left;
 }
 
 .texto.expandido{
-  max-height:900px;
+  max-height:1200px;
 }
 
 .btn-ler{
-  margin-top:8px;
-  background:none;
+  margin-top:10px;
+  background:#c63cff;
+  color:#fff;
   border:none;
-  color:#c63cff;
+  border-radius:20px;
+  padding:8px 18px;
   font-weight:700;
   cursor:pointer;
+  animation:pulse 1.6s infinite;
+}
+
+.btn-ler.sem-efeito{
+  animation:none;
+  background:none;
+  color:#c63cff;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(198,60,255,.6)}
+  70%{box-shadow:0 0 0 10px rgba(198,60,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(198,60,255,0)}
+}
+
+.dica{
+  font-size:0.75rem;
+  color:#b45fbf;
+  margin-top:4px;
 }
 
 img{
   width:150px;
   margin-top:14px;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,.2));
 }
 </style>
 </head>
@@ -115,7 +133,6 @@ img{
 <div class="card">
   <h1 id="titulo">Algumas palavras pra você</h1>
 
-  <!-- PAINEL SECRETO -->
   <div id="painelSecreto">
     👀 <strong>Leituras:</strong> <span id="totalCliques">0</span><br>
     🕒 <strong>Última:</strong> <span id="ultimoClique">---</span>
@@ -130,60 +147,61 @@ img{
   </div>
 
   <div id="texto" class="texto">
-    Oii... 🙃 Independente da hora que você ler isso,  
-    espero que seu coração esteja em paz. ❤️  
-
-    Sinto que precisava passar aqui para dizer o óbvio:  
-    você é <strong>escandalosamente linda</strong>.
-
+    Oi... 🙃 Independente da hora que você ler isso, espero que seu coração esteja em paz. ❤️
     <br><br>
 
-    Deslumbrante. É como se a perfeição tivesse finalmente encontrado um rosto — e esse rosto é o seu.  
+    Sinto que precisava passar aqui para dizer o óbvio: você é <strong>escandalosamente linda</strong>.
+    Deslumbrante. É como se a perfeição tivesse finalmente encontrado um rosto — e esse rosto é o seu.
     Não falta, nem sobra nada; você é o equilíbrio exato.
-
+    Eu passaria horas descrevendo cada detalhe seu, mas escrevo para não demonstrar tanto o quanto te admiro
+    (embora seja difícil esconder).
     <br><br>
 
-    Meu maior desejo é ver sua felicidade transbordar.  
-    Obrigado por transformar meu modo de pensar  
-    e por me fazer observar o mundo de um jeito novo.
-
+    Meu maior desejo é ver sua felicidade transbordar. Aquele seu sorriso real, que faz os olhos se apertarem
+    e ilumina tudo ao redor. Mas, além da beleza, quero te agradecer.
+    Obrigado por transformar meu modo de pensar e por me fazer observar o mundo de um jeito novo.
     <br><br>
 
-    Cuide-se. Proteja sua saúde, sua mente e sua essência.  
-    Seja sempre a mulher dos seus sonhos,  
-    porque, para mim, você já é a personificação da perfeição.
+    Por isso, te peço: cuide-se. Proteja sua saúde, sua mente e sua essência.
+    Nos dias difíceis, lembre-se que a força nasce na superação.
+    Siga seu caminho com calma, estude, floresça e nunca esqueça o potencial gigante que você tem.
+    E quando tiver um segundo, olhe-se no espelho. Mas olhe de perto.
+    Repare na imensidão desses seus olhos e na perfeição que eles carregam.
+    Seja sempre a mulher dos seus sonhos, porque, para mim, você já é a personificação da perfeição.
   </div>
 
   <button id="btnLer" class="btn-ler" onclick="lerMais()">Ler mais</button>
+  <div id="dica" class="dica">toque para continuar lendo 💗</div>
 
   <img src="Elefante.png" alt="Elefantinho fofo">
 </div>
 
 <script>
-/* FIREBASE */
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyA-YBCIT3Pxu4Bxsp2zFYQNJaeCVwF56wk",
+  authDomain: "contando-os-dias-239c4.firebaseapp.com",
+  projectId: "contando-os-dias-239c4",
+  storageBucket: "contando-os-dias-239c4.firebasestorage.app",
+  messagingSenderId: "977000598682",
+  messagingSenderId: "977000598682",
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* LER MAIS */
 let registrado = false;
 
 function lerMais(){
   const texto = document.getElementById("texto");
   const btn = document.getElementById("btnLer");
+  const dica = document.getElementById("dica");
 
   texto.classList.toggle("expandido");
 
   if(texto.classList.contains("expandido")){
     btn.textContent = "Ler menos";
+    btn.classList.add("sem-efeito");
+    dica.style.display = "none";
 
     if(!registrado){
       db.collection("lerMaisClicks").add({
@@ -194,10 +212,11 @@ function lerMais(){
     }
   } else {
     btn.textContent = "Ler mais";
+    btn.classList.remove("sem-efeito");
+    dica.style.display = "block";
   }
 }
 
-/* PAINEL SECRETO – 3 cliques no título */
 let clicks = 0;
 const titulo = document.getElementById("titulo");
 
@@ -211,15 +230,13 @@ titulo.addEventListener("click", () => {
 });
 
 function mostrarPainel(){
-  const painel = document.getElementById("painelSecreto");
-  painel.style.display = "block";
+  document.getElementById("painelSecreto").style.display = "block";
 
   db.collection("lerMaisClicks")
     .orderBy("data", "desc")
     .get()
     .then(snapshot => {
       document.getElementById("totalCliques").textContent = snapshot.size;
-
       if(!snapshot.empty){
         const ultima = snapshot.docs[0].data().data.toDate();
         document.getElementById("ultimoClique").textContent =

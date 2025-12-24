@@ -3,141 +3,194 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Contando os dias pra ficar nos seus braços</title>
+<title>Algumas palavras do coração</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins", sans-serif; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif}
 
-  body {
-    background: linear-gradient(180deg, #ffc7ec, #e5c6ff);
-    display:flex; justify-content:center; align-items:center;
-    min-height:100vh; padding:20px;
-  }
+body{
+  background:linear-gradient(180deg,#ffc7ec,#e5c6ff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+}
 
-  .card {
-    background:rgba(255,255,255,0.75);
-    backdrop-filter:blur(10px);
-    border-radius:25px;
-    padding:25px;
-    max-width:380px;
-    width:100%;
-    box-shadow:0 8px 25px rgba(0,0,0,0.15);
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-  }
+.card{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(10px);
+  border-radius:25px;
+  padding:25px;
+  max-width:380px;
+  width:100%;
+  box-shadow:0 8px 25px rgba(0,0,0,0.15);
+  text-align:center;
+}
 
-  h1 {
-    font-size:1.6rem;
-    color:#c74bff;
-    margin-bottom:20px;
-    font-weight:600;
-  }
+h1{
+  font-size:1.6rem;
+  color:#c74bff;
+  margin-bottom:14px;
+}
 
-  .countdown{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
-.countdown .unit{background:rgba(255,255,255,0.85);padding:12px 10px;border-radius:12px;min-width:64px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
-.countdown .num{font-size:1.4rem;font-weight:800;color:#c63cff}
-.countdown .label{font-size:0.85rem;color:#a66aad;margin-top:6px}
+/* BLOCO SENTIMENTO */
+.sentimento{
+  margin:14px 0 6px;
+  padding:14px;
+  background:rgba(255,255,255,0.6);
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
 
-/* pequena mensagem abaixo do contador */
-.msg-small{color:#b45fbf;margin-top:8px;font-weight:600} 
+.sentimento .icone{
+  font-size:1.6rem;
+  margin-bottom:6px;
+}
 
-  img {
-    width:150px;
-    margin-top:10px;
-    filter:drop-shadow(0 4px 10px rgba(0,0,0,0.2));
-  }
+.sentimento .frase{
+  color:#8a3f94;
+  font-weight:600;
+  font-size:0.95rem;
+  line-height:1.4;
+}
 
-  .emoji {
-    position:absolute;
-    opacity:0.18;
-    font-size:3rem;
-    animation: flutuar 6s ease-in-out infinite;
-  }
+.sentimento .frase span{
+  display:block;
+  font-size:0.85rem;
+  color:#b45fbf;
+  margin-top:4px;
+}
 
-  @keyframes flutuar {
-    0% { transform:translateY(0); }
-    50% { transform:translateY(-12px); }
-    100% { transform:translateY(0); }
-  }
+/* TEXTO */
+.texto{
+  margin-top:16px;
+  color:#7a3c86;
+  line-height:1.5;
+  max-height:48px;
+  overflow:hidden;
+  transition:max-height .4s ease;
+}
 
-  .e1 { top:10px; left:20px; }
-  .e2 { bottom:20px; right:25px; animation-delay:1.5s; }
-  .e3 { top:50%; left:-10px; animation-delay:0.7s; }
+.texto.expandido{
+  max-height:800px;
+}
 
+.btn-ler{
+  margin-top:8px;
+  background:none;
+  border:none;
+  color:#c63cff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+img{
+  width:150px;
+  margin-top:14px;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.2));
+}
 </style>
 </head>
+
 <body>
 
 <div class="card">
-  <div class="emoji e1">🐘</div>
-  <div class="emoji e2">🐘</div>
-  <div class="emoji e3">🐘</div>
+  <h1>Algumas palavras pra você</h1>
 
-  <h1>Contando os dias pra ficar nos seus braços</h1>
-  <div class="countdown" aria-live="polite">
-    <div class="unit"><div class="num" id="days">0</div><div class="label">dias</div></div>
-    <div class="unit"><div class="num" id="hours">00</div><div class="label">horas</div></div>
-    <div class="unit"><div class="num" id="minutes">00</div><div class="label">minutos</div></div>
-    <div class="unit"><div class="num" id="seconds">00</div><div class="label">segundos</div></div>
+  <div class="sentimento">
+    <div class="icone">💌</div>
+    <div class="frase">
+      Algumas palavras que vieram do coração.
+      <span>Sem pressa. Sem tempo. Só sentimento.</span>
+    </div>
   </div>
-  <div class="msg-small" id="smallMsg">Contagem em andamento...</div>
-  <img src="Elefante.png" alt="Elefantinho fofo" />
+
+  <div id="texto" class="texto">
+    Oii... 🙃 Independente da hora que você ler isso,  
+    espero que seu coração esteja em paz. ❤️  
+
+    Sinto que precisava passar aqui para dizer o óbvio:  
+    você é <strong>escandalosamente linda</strong>.
+
+    <br><br>
+
+    Deslumbrante. É como se a perfeição tivesse finalmente encontrado um rosto — e esse rosto é o seu.  
+    Não falta, nem sobra nada; você é o equilíbrio exato. Eu passaria horas descrevendo cada detalhe seu,  
+    mas escrevo para não demonstrar tanto o quanto te admiro (embora seja difícil esconder).
+
+    <br><br>
+
+    Meu maior desejo é ver sua felicidade transbordar. Aquele seu sorriso real, que faz os olhos se apertarem  
+    e ilumina tudo ao redor. Mas, além da beleza, quero te agradecer. Obrigado por transformar meu modo de pensar  
+    e por me fazer observar o mundo de um jeito novo.
+
+    <br><br>
+
+    Por isso, te peço: cuide-se. Proteja sua saúde, sua mente e sua essência.  
+    Nos dias difíceis, lembre-se que a força nasce na superação.  
+    Siga seu caminho com calma, estude, floresça e nunca esqueça o potencial gigante que você tem.
+
+    <br><br>
+
+    E quando tiver um segundo, olhe-se no espelho.  
+    Mas olhe de perto. Repare na imensidão desses seus olhos  
+    e na perfeição que eles carregam.
+
+    <br><br>
+
+    Seja sempre a mulher dos seus sonhos,  
+    porque, para mim, você já é a personificação da perfeição.
+  </div>
+
+  <button id="btnLer" class="btn-ler" onclick="lerMais()">Ler mais</button>
+
+  <img src="Elefante.png" alt="Elefantinho fofo">
 </div>
 
 <script>
-  // Contador regressivo até o próximo domingo (início do dia)
-  function getNextSunday(from){
-    const d = new Date(from);
-    const day = d.getDay(); // 0 = Sunday
-    const daysUntil = (7 - day) % 7;
-    d.setDate(d.getDate() + daysUntil);
-    d.setHours(0,0,0,0);
-    if (d <= from) d.setDate(d.getDate() + 7);
-    return d;
-  }
+/* FIREBASE */
+const firebaseConfig = {
+  apiKey: "AIzaSyA-YBCIT3Pxu4Bxsp2zFYQNJaeCVwF56wk",
+  authDomain: "contando-os-dias-239c4.firebaseapp.com",
+  projectId: "contando-os-dias-239c4",
+  storageBucket: "contando-os-dias-239c4.firebasestorage.app",
+  messagingSenderId: "977000598682",
+  appId: "1:977000598682:web:57f31458ed3a4a69972323"
+};
 
-  function pad(n){return String(n).padStart(2,'0');}
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-  function updateCountdown(){
-    const now = new Date();
-    const target = getNextSunday(now);
-    const diff = target - now;
+/* LER MAIS */
+let registrado = false;
 
-    const elDays = document.getElementById('days');
-    const elHours = document.getElementById('hours');
-    const elMinutes = document.getElementById('minutes');
-    const elSeconds = document.getElementById('seconds');
-    const elMsg = document.getElementById('smallMsg');
+function lerMais(){
+  const texto = document.getElementById("texto");
+  const btn = document.getElementById("btnLer");
 
-    if (diff <= 0){
-      elDays.textContent = '0';
-      elHours.textContent = '00';
-      elMinutes.textContent = '00';
-      elSeconds.textContent = '00';
-      elMsg.textContent = 'Chegou no Domingo! 🎉';
-      return;
+  texto.classList.toggle("expandido");
+
+  if(texto.classList.contains("expandido")){
+    btn.textContent = "Ler menos";
+
+    if(!registrado){
+      db.collection("lerMaisClicks").add({
+        data: new Date(),
+        pagina: window.location.href
+      });
+      registrado = true;
     }
 
-    const totalSec = Math.floor(diff/1000);
-    const days = Math.floor(totalSec / 86400);
-    const hours = Math.floor((totalSec % 86400) / 3600);
-    const minutes = Math.floor((totalSec % 3600) / 60);
-    const seconds = totalSec % 60;
-
-    elDays.textContent = days;
-    elHours.textContent = pad(hours);
-    elMinutes.textContent = pad(minutes);
-    elSeconds.textContent = pad(seconds);
-
-    if (days === 0) elMsg.textContent = 'É hoje — falta menos de 24 horas!';
-    else if (days === 1) elMsg.textContent = 'Falta 1 dia — quase lá.';
-    else elMsg.textContent = 'Faltam ' + days + ' dias.';
+  } else {
+    btn.textContent = "Ler mais";
   }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+}
 </script>
 
 </body>
 </html>
-
